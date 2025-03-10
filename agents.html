@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Cold Email Auto Responder - Mes Agents</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --secondary: #f9fafb;
+            --dark: #111827;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --green-500: #10b981;
+            --green-600: #059669;
+            --red-500: #ef4444;
+            --yellow-500: #f59e0b;
+            --blue-50: #eff6ff;
+            --blue-100: #dbeafe;
+            --blue-500: #3b82f6;
+            --container-width: 1280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f9fafb;
+            color: var(--gray-800);
+            line-height: 1.5;
+        }
+
+        /* Layout styles */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 230px;
+            background-color: white;
+            border-right: 1px solid var(--gray-200);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 20;
+            transition: transform 0.3s ease;
+        }
+
+        .content-wrapper {
+            flex: 1;
+            margin-left: 230px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content {
+            padding: 24px 32px;
+            max-width: var(--container-width);
+            margin: 0 auto;
+        }
+
+        /* Header styles */
+        .header {
+            height: 64px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            padding: 0 32px;
+            background-color: white;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--gray-700);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 4px;
+            margin-right: 16px;
+        }
+
+        .header-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-600);
+        }
+
+        /* Logo styles */
+        .logo-container {
+            height: 64px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .logo {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .logo-icon {
+            font-size: 1.25rem;
+        }
+
+        /* Sidebar menu styles */
+        .sidebar-section {
+            padding: 20px 0;
+        }
+
+        .sidebar-section:not(:last-child) {
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .sidebar-heading {
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            color: var(--gray-500);
+            padding: 0 20px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu-item {
+            position: relative;
+        }
+
+        .sidebar-menu-link {
+            display: flex;
+            align-items: center;
+            padding: 8px 20px;
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .sidebar-menu-link:hover {
+            background-color: var(--gray-50);
+            color: var(--primary);
+        }
+
+        .sidebar-menu-link.active {
+            color: var(--primary);
+            background-color: var(--blue-50);
+            font-weight: 600;
+        }
+
+        .sidebar-menu-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background-color: var(--primary);
+        }
+
+        .sidebar-menu-icon {
+            margin-right: 12px;
+            width: 16px;
+            text-align: center;
+        }
+
+        /* Page content styles */
+        .page-header {
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title-section {
+            flex: 1;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .page-description {
+            color: var(--gray-600);
+            max-width: 640px;
+        }
+
+        .page-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* Card styles */
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        /* Button styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 16px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-outline {
+            background-color: white;
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--gray-50);
+        }
+
+        .btn-icon {
+            margin-right: 8px;
+        }
+
+        /* Table styles */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px 16px;
+            text-align: left;
+        }
+
+        .table th {
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--gray-500);
+            background-color: var(--gray-50);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .table td {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-row:hover {
+            background-color: var(--gray-50);
+        }
+
+        /* Status badge */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border-radius: 9999px;
+        }
+
+        .badge-active {
+            background-color: #ecfdf5;
+            color: var(--green-600);
+        }
+
+        .badge-inactive {
+            background-color: #fef2f2;
+            color: var(--red-500);
+        }
+
+        .badge-pending {
+            background-color: #fffbeb;
+            color: var(--yellow-500);
+        }
+
+        /* Empty state */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 64px 24px;
+            text-align: center;
+        }
+
+        .empty-state-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background-color: var(--blue-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            color: var(--primary);
+            font-size: 24px;
+        }
+
+        .empty-state-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .empty-state-description {
+            color: var(--gray-600);
+            margin-bottom: 24px;
+            max-width: 400px;
+        }
+
+        /* Action menu */
+        .action-menu {
+            position: relative;
+        }
+
+        .action-button {
+            background: none;
+            border: none;
+            color: var(--gray-500);
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-menu-dropdown {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: white;
+            border-radius: 6px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            min-width: 160px;
+            z-index: 10;
+            display: none;
+        }
+
+        .action-menu.active .action-menu-dropdown {
+            display: block;
+        }
+
+        .action-menu-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            cursor: pointer;
+        }
+
+        .action-menu-item:hover {
+            background-color: var(--gray-50);
+        }
+
+        .action-menu-icon {
+            margin-right: 8px;
+            width: 16px;
+            color: var(--gray-500);
+        }
+
+        /* Overlay for mobile menu */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 15;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 991px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .content-wrapper {
+                margin-left: 0;
+            }
+
+            .header {
+                padding: 0 16px;
+            }
+
+            .header-title {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .logo {
+                font-size: 1rem;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .page-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .main-content {
+                padding: 16px;
+            }
+
+            .table th,
+            .table td {
+                padding: 8px;
+            }
+
+            .action-button {
+                padding: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-title {
+                display: none;
+            }
+
+            .page-title {
+                font-size: 1.25rem;
+            }
+
+            .btn {
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Mobile menu overlay -->
+        <div class="overlay" id="overlay"></div>
+
+        <!-- Sidebar navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo-container">
+                <div class="logo">
+                    <i class="fas fa-envelope-open-text logo-icon"></i>
+                    <span>Cold Email Responder</span>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-heading">Principal</h3>
+                <ul class="sidebar-menu">
+                    <li class="sidebar-menu-item">
+                        <a href="nouvel-agent.html" class="sidebar-menu-link">
+                            <i class="fas fa-plus-circle sidebar-menu-icon"></i>
+                            Nouvel agent
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="mes-agents.html" class="sidebar-menu-link active">
+                            <i class="fas fa-robot sidebar-menu-icon"></i>
+                            Mes agents
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="conversations.html" class="sidebar-menu-link">
+                            <i class="fas fa-envelope sidebar-menu-icon"></i>
+                            Conversations
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-heading">Paramètres</h3>
+                <ul class="sidebar-menu">
+                    <li class="sidebar-menu-item">
+                        <a href="compte.html" class="sidebar-menu-link">
+                            <i class="fas fa-user sidebar-menu-icon"></i>
+                            Compte
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main content area -->
+        <div class="content-wrapper">
+            <header class="header">
+                <button class="menu-toggle" id="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="header-title">Mes agents</div>
+                <div class="user-menu">
+                    <a href="#" class="btn">
+                        <i class="fas fa-question-circle"></i>
+                    </a>
+                    <div class="user-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </header>
+
+            <main class="main-content">
+                <div class="page-header">
+                    <div class="page-title-section">
+                        <h1 class="page-title">Mes agents IA</h1>
+                        <p class="page-description">Consultez et gérez tous vos agents de réponse automatique</p>
+                    </div>
+                    <div class="page-actions">
+                        <a href="nouvel-agent.html" class="btn btn-primary">
+                            <i class="fas fa-plus btn-icon"></i>
+                            Nouvel agent
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Emails traités</th>
+                                    <th>Taux de réponse</th>
+                                    <th>Statut</th>
+                                    <th>Dernière activité</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="table-row">
+                                    <td>Agent commercial</td>
+                                    <td>124</td>
+                                    <td>68%</td>
+                                    <td><span class="badge badge-active">Actif</span></td>
+                                    <td>Aujourd'hui à 14:23</td>
+                                    <td>
+                                        <div class="action-menu" id="action-menu-1">
+                                            <button class="action-button action-toggle">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <div class="action-menu-dropdown">
+                                                <div class="action-menu-item">
+                                                    <i class="fas fa-edit action-menu-icon"></i>
+                                                    Modifier
+                                                </div>
+                                                <div class="action-menu-item">
+                                                    <i class="fas fa-chart-line action-menu-icon"></i>
+                                                    Statistiques
+                                                </div>
+                                                <div class="action-menu-item">
+                                                    <i class="fas fa-pause action-menu-icon"></i>
+                                                    Suspendre
+                                                </div>
+                                                <div class="action-menu-item">
+                                                    <i class="fas fa-trash action-menu-icon"></i>
+                                                    Supprimer
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="table-row">
+                                    <td>Agent support</td>
+                                    <td>52</td>
+                                    <td>75%</td>
+                                    <td><span class="badge badge-active">Actif</span></td>
+                                    <td>Hier à 09:47</td>
+                                    <td>
+                                        <div class="action-menu" id="action-menu-2">
+                                            <button class="action-button action-toggle">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <div class="action-menu-dropdown">
+                                                <div class="action-menu-item">
+                                                    <i class="fas fa-edit action-menu-icon"></i>
+                                                    Modifier
+                                                </div>
+                                                <div class="action-menu-item">
+                                                    <i class="fas fa-chart-line action-menu-icon"></i>
+                                                    Statistiques
+                                                </div>
+                                                <div class="action-menu-item">
+                                                    <i class="fas fa-pause action-menu-icon"></i>
+                                                    Suspendre
+                                                </div>
+                                                <div class="action-menu-item">
+                                                    <i class="fas fa-trash action-menu-icon"></i>
+                                                    Supprimer
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="table-row">
+                                    <td>Agent rendez-vous</td>
+                                    <td>37</td>
+                                    <td>82%</td>
+                                    <td><span class="badge badge-inactive">Inactif</span></td>
+                                    <td>11 mar 2025</td>
+                                    <td>
+                                        <div class="action-menu" id="action-menu-3">
+                                            <button class="action-button action-toggle">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <div class="action-menu-dropdown">
+                                                <div class="action-menu-item">
+                                                    <i class="fas fa-edit action-menu-icon"></i>
+                                                    Modifier
+                                                </div>
+                                                <div class="action-menu-item">
+                                                    <i class="fas fa-chart-line action-menu-icon"></i>
+                                                    Statistiques
+                                                </div>
+                                                <div class="action-menu-item">
+                                                    <i class="fas fa-play action-menu-icon"></i>
+                                                    Activer
+                                                </div>
+                                                <div class="action-menu-item">
+                                                    <i class="fas fa-trash action-menu-icon"></i>
+                                                    Supprimer
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Empty state (hidden by default, just for demonstration) -->
+                <div class="card" style="display: none;">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3 class="empty-state-title">Aucun agent configuré</h3>
+                        <p class="empty-state-description">Vous n'avez pas encore créé d'agent IA. Créez votre premier agent pour commencer à automatiser vos réponses aux emails.</p>
+                        <a href="nouvel-agent.html" class="btn btn-primary">
+                            <i class="fas fa-plus btn-icon"></i>
+                            Créer un agent
+                        </a>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Toggle mobile menu
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.add('active');
+            document.getElementById('overlay').classList.add('active');
+        });
+
+        document.getElementById('overlay').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.remove('active');
+            document.getElementById('overlay').classList.remove('active');
+        });
+
+        // Toggle action menus
+        const actionMenus = document.querySelectorAll('.action-menu');
+        actionMenus.forEach(menu => {
+            const toggle = menu.querySelector('.action-toggle');
+            toggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                menu.classList.toggle('active');
+                
+                // Close other menus
+                actionMenus.forEach(otherMenu => {
+                    if (otherMenu !== menu) {
+                        otherMenu.classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        // Close action menus when clicking outside
+        document.addEventListener('click', function() {
+            actionMenus.forEach(menu => {
+                menu.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
