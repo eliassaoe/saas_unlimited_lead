@@ -1,526 +1,802 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>UnlimitedLeads - Génération de Leads Premium</title>
-  <meta name="description" content="UnlimitedLeads - Service exclusif de génération de leads qualifiés et vérifiés"/>
-  <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="107x109"/>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-    
-    :root {
-      --primary: #3563E9;
-      --primary-dark: #2B4ECC;
-      --secondary: #101828;
-      --text-primary: #1D2939;
-      --text-secondary: #667085;
-      --background: #F9FAFB;
-      --white: #FFFFFF;
-      --border: #E4E7EC;
-      --shadow: 0px 12px 24px rgba(16, 24, 40, 0.08);
-      --radius: 12px;
-    }
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
-    }
-    
-    body {
-      background-color: var(--background);
-      color: var(--text-primary);
-      line-height: 1.6;
-    }
-    
-    .container {
-      max-width: 1140px;
-      margin: 0 auto;
-      padding: 3rem 1.5rem;
-    }
-    
-    .header {
-      text-align: center;
-      margin-bottom: 4rem;
-    }
-    
-    .logo {
-      font-size: 3.5rem;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      background: linear-gradient(135deg, #3563E9 0%, #6366F1 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 1rem;
-    }
-    
-    .tagline {
-      font-size: 1.25rem;
-      font-weight: 500;
-      color: var(--text-secondary);
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    
-    .content-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 5rem;
-    }
-    
-    /* Form Section Styles */
-    .form-section {
-      background-color: var(--white);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 3rem;
-      margin-bottom: 3rem;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .form-section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 8px;
-      background: linear-gradient(135deg, #3563E9 0%, #6366F1 100%);
-    }
-    
-    .form-title {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 2.5rem;
-      color: var(--secondary);
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-    
-    .form-title svg {
-      width: 32px;
-      height: 32px;
-    }
-    
-    .form {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      width: 100%;
-    }
-    
-    .input-group {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 0.75rem;
-      width: 100%;
-    }
-    
-    @media (min-width: 640px) {
-      .input-group {
-        grid-template-columns: 1fr 2fr;
-        align-items: center;
-      }
-    }
-    
-    .form-label {
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-    
-    .form-input {
-      width: 100%;
-      padding: 1rem 1.25rem;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius);
-      font-size: 1rem;
-      transition: all 0.2s ease;
-      background-color: var(--white);
-      color: var(--text-primary);
-      -webkit-appearance: none; /* Pour corriger le rendu sur iOS */
-      appearance: none;
-    }
-    
-    /* Ajustements pour les champs de type number */
-    input[type="number"] {
-      -moz-appearance: textfield; /* Firefox */
-    }
-    
-    input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-    
-    .form-input::placeholder {
-      color: var(--text-secondary);
-      opacity: 0.8;
-    }
-    
-    .form-input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(53, 99, 233, 0.15);
-    }
-    
-    .submit-btn {
-      display: block;
-      width: 100%;
-      padding: 1rem;
-      margin-top: 2rem;
-      background: linear-gradient(135deg, #3563E9 0%, #6366F1 100%);
-      color: var(--white);
-      border: none;
-      border-radius: var(--radius);
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-align: center;
-    }
-    
-    .submit-btn:hover {
-      background: linear-gradient(135deg, #2B4ECC 0%, #5153D4 100%);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(53, 99, 233, 0.2);
-    }
-    
-    .submit-btn:active {
-      transform: translateY(0);
-      box-shadow: none;
-    }
-    
-    /* How-to Section Styles */
-    .how-to-section {
-      text-align: center;
-      margin: 0 auto;
-      max-width: 800px;
-    }
-    
-    .section-title {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--secondary);
-      margin-bottom: 3rem;
-      position: relative;
-      display: inline-block;
-    }
-    
-    .section-title::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 4px;
-      background: linear-gradient(135deg, #3563E9 0%, #6366F1 100%);
-      border-radius: 2px;
-    }
-    
-    .steps-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 2.5rem;
-      margin-top: 2.5rem;
-    }
-    
-    .step-card {
-      background-color: var(--white);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 2.5rem 2rem;
-      text-align: left;
-      position: relative;
-      transition: all 0.3s ease;
-    }
-    
-    .step-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 16px 32px rgba(16, 24, 40, 0.12);
-    }
-    
-    .step-number {
-      position: absolute;
-      top: -15px;
-      left: -15px;
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(135deg, #3563E9 0%, #6366F1 100%);
-      color: var(--white);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 1rem;
-      box-shadow: 0 4px 8px rgba(53, 99, 233, 0.25);
-    }
-    
-    .step-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 48px;
-      height: 48px;
-      background-color: rgba(53, 99, 233, 0.1);
-      border-radius: 12px;
-      margin-bottom: 1.5rem;
-    }
-    
-    .step-icon svg {
-      width: 24px;
-      height: 24px;
-      color: var(--primary);
-    }
-    
-    .step-title {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-    }
-    
-    .step-description {
-      color: var(--text-secondary);
-      font-size: 0.95rem;
-      line-height: 1.7;
-    }
-    
-    /* Footer Styles */
-    .footer {
-      margin-top: 6rem;
-      text-align: center;
-      padding: 2rem 0;
-      border-top: 1px solid var(--border);
-    }
-    
-    .footer-logo {
-      font-size: 1.5rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, #3563E9 0%, #6366F1 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 1.5rem;
-    }
-    
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin: 1.5rem 0;
-      flex-wrap: wrap;
-    }
-    
-    .footer-link {
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 0.875rem;
-      font-weight: 500;
-      transition: color 0.2s ease;
-    }
-    
-    .footer-link:hover {
-      color: var(--primary);
-    }
-    
-    .footer-contact {
-      color: var(--text-secondary);
-      font-size: 0.875rem;
-      margin-top: 1rem;
-    }
-    
-    /* Responsive Styles */
-    @media (min-width: 768px) {
-      .steps-container {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-    
-    /* Mobile first responsive design */
-    @media (max-width: 767px) {
-      .container {
-        padding: 2rem 1rem;
-      }
-      
-      .header {
-        margin-bottom: 2.5rem;
-      }
-      
-      .logo {
-        font-size: 2.5rem;
-      }
-      
-      .tagline {
-        font-size: 1rem;
-      }
-      
-      .form-section {
-        padding: 2rem 1.5rem;
-      }
-      
-      .form-title {
-        font-size: 1.5rem;
-        margin-bottom: 1.5rem;
-      }
-      
-      .step-card {
-        padding: 2rem 1.5rem;
-      }
-      
-      .steps-container {
-        gap: 2rem;
-      }
-      
-      .section-title {
-        font-size: 1.75rem;
-      }
-    }
-    
-    /* Tablet responsive design */
-    @media (min-width: 768px) and (max-width: 1023px) {
-      .container {
-        padding: 2.5rem 2rem;
-      }
-      
-      .steps-container {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1.5rem;
-      }
-      
-      .step-card {
-        padding: 2rem 1.5rem;
-      }
-    }
-    
-    /* Large screens responsive design */
-    @media (min-width: 1024px) {
-      .container {
-        padding: 3rem 2rem;
-      }
-      
-      .form-section {
-        padding: 3rem;
-      }
-    }
-    
-    /* Extra large screens */
-    @media (min-width: 1280px) {
-      .container {
-        max-width: 1200px;
-      }
-    }
-  </style>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Cold Email Auto Responder - Configurez votre répondeur intelligent</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --secondary: #f9fafb;
+            --dark: #111827;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --green-500: #10b981;
+            --green-600: #059669;
+            --red-500: #ef4444;
+            --yellow-500: #f59e0b;
+            --blue-50: #eff6ff;
+            --blue-500: #3b82f6;
+            --container-width: 1280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f9fafb;
+            color: var(--gray-800);
+            line-height: 1.5;
+        }
+
+        /* Layout styles */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 230px;
+            background-color: white;
+            border-right: 1px solid var(--gray-200);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 20;
+            transition: transform 0.3s ease;
+        }
+
+        .content-wrapper {
+            flex: 1;
+            margin-left: 230px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content {
+            padding: 24px 32px;
+            max-width: var(--container-width);
+            margin: 0 auto;
+        }
+
+        /* Header styles */
+        .header {
+            height: 64px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            padding: 0 32px;
+            background-color: white;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--gray-700);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 4px;
+            margin-right: 16px;
+        }
+
+        .header-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-600);
+        }
+
+        /* Logo styles */
+        .logo-container {
+            height: 64px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .logo {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .logo-icon {
+            font-size: 1.25rem;
+        }
+
+        /* Sidebar menu styles */
+        .sidebar-section {
+            padding: 20px 0;
+        }
+
+        .sidebar-section:not(:last-child) {
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .sidebar-heading {
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            color: var(--gray-500);
+            padding: 0 20px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu-item {
+            position: relative;
+        }
+
+        .sidebar-menu-link {
+            display: flex;
+            align-items: center;
+            padding: 8px 20px;
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .sidebar-menu-link:hover {
+            background-color: var(--gray-50);
+            color: var(--primary);
+        }
+
+        .sidebar-menu-link.active {
+            color: var(--primary);
+            background-color: var(--blue-50);
+            font-weight: 600;
+        }
+
+        .sidebar-menu-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background-color: var(--primary);
+        }
+
+        .sidebar-menu-icon {
+            margin-right: 12px;
+            width: 16px;
+            text-align: center;
+        }
+
+        /* Page content styles */
+        .page-header {
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .page-description {
+            color: var(--gray-600);
+            max-width: 640px;
+        }
+
+        /* Card styles */
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title-icon {
+            color: var(--primary);
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        /* Form styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            font-size: 0.875rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            color: var(--gray-800);
+            background-color: white;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: 0;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .form-hint {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-500);
+        }
+
+        .input-group .form-control {
+            padding-left: 36px;
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Toggle switch */
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 36px;
+            height: 20px;
+            margin-right: 8px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--gray-300);
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(16px);
+        }
+
+        .toggle-label {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+        }
+
+        /* Button styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 16px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-icon {
+            margin-right: 8px;
+        }
+
+        .btn-lg {
+            padding: 12px 20px;
+            font-size: 1rem;
+        }
+
+        /* Notification dialog */
+        .notification-dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .notification-dialog.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .notification-content {
+            background: white;
+            border-radius: 8px;
+            padding: 32px;
+            max-width: 480px;
+            width: 90%;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .notification-dialog.active .notification-content {
+            transform: translateY(0);
+        }
+
+        .notification-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: #ecfdf5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            color: var(--green-500);
+            font-size: 24px;
+        }
+
+        .notification-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .notification-message {
+            color: var(--gray-600);
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .notification-actions {
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Loading animation */
+        .btn-loading {
+            position: relative;
+            pointer-events: none;
+        }
+
+        .btn-loading .btn-text {
+            visibility: hidden;
+        }
+
+        .btn-loading:after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Overlay for mobile menu */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 15;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 991px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .content-wrapper {
+                margin-left: 0;
+            }
+
+            .header {
+                padding: 0 16px;
+            }
+
+            .header-title {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .logo {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .main-content {
+                padding: 16px;
+            }
+
+            .card-body {
+                padding: 16px;
+            }
+
+            .notification-content {
+                padding: 24px;
+                width: 95%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-title {
+                display: none;
+            }
+
+            .page-title {
+                font-size: 1.25rem;
+            }
+
+            .btn-lg {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <h1 class="logo">UnlimitedLeads</h1>
-      <p class="tagline">Service exclusif de génération de leads qualifiés et vérifiés pour votre croissance</p>
-    </header>
-    
-    <div class="content-wrapper">
-      <!-- Form Section (now first) -->
-      <section class="form-section">
-        <h2 class="form-title">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-            <circle cx="9" cy="7" r="4"></circle>
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-          </svg>
-          Demande de leads
-        </h2>
-        
-        <form class="form">
-          <div class="input-group">
-            <label class="form-label" for="nom">Nom</label>
-            <input class="form-input" type="text" id="nom" placeholder="Votre nom complet" required>
-          </div>
-          
-          <div class="input-group">
-            <label class="form-label" for="email">Email</label>
-            <input class="form-input" type="email" id="email" placeholder="votre@email.com" required>
-          </div>
-          
-          <div class="input-group">
-            <label class="form-label" for="lien_apollo">Lien Apollo</label>
-            <input class="form-input" type="url" id="lien_apollo" placeholder="https://app.apollo.io/..." required>
-          </div>
-          
-          <div class="input-group">
-            <label class="form-label" for="nombre_leads">Nombre de leads</label>
-            <input class="form-input" type="number" id="nombre_leads" placeholder="100" min="1" required>
-          </div>
-          
-          <div class="input-group">
-            <label class="form-label" for="nom_fichier">Nom du fichier</label>
-            <input class="form-input" type="text" id="nom_fichier" placeholder="leads_projet_mars2025" required>
-          </div>
-          
-          <button type="submit" class="submit-btn">Obtenir les leads</button>
-        </form>
-      </section>
-      
-      <!-- How-to Section (now second) -->
-      <section class="how-to-section">
-        <h2 class="section-title">Comment ça fonctionne</h2>
-        
-        <div class="steps-container">
-          <div class="step-card">
-            <div class="step-number">1</div>
-            <div class="step-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-              </svg>
+    <div class="app-container">
+        <!-- Mobile menu overlay -->
+        <div class="overlay" id="overlay"></div>
+
+        <!-- Sidebar navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo-container">
+                <div class="logo">
+                    <i class="fas fa-envelope-open-text logo-icon"></i>
+                    <span>Cold Email Responder</span>
+                </div>
             </div>
-            <h3 class="step-title">Remplissez le formulaire</h3>
-            <p class="step-description">Indiquez vos besoins spécifiques et le nombre de leads souhaités pour votre campagne.</p>
-          </div>
-          
-          <div class="step-card">
-            <div class="step-number">2</div>
-            <div class="step-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                <line x1="1" y1="10" x2="23" y2="10"></line>
-              </svg>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-heading">Principal</h3>
+                <ul class="sidebar-menu">
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link">
+                            <i class="fas fa-home sidebar-menu-icon"></i>
+                            Tableau de bord
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link active">
+                            <i class="fas fa-plus-circle sidebar-menu-icon"></i>
+                            Nouvel agent
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link">
+                            <i class="fas fa-robot sidebar-menu-icon"></i>
+                            Mes agents
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link">
+                            <i class="fas fa-envelope sidebar-menu-icon"></i>
+                            Conversations
+                        </a>
+                    </li>
+                </ul>
             </div>
-            <h3 class="step-title">Effectuez le paiement</h3>
-            <p class="step-description">Vous recevrez un lien de paiement sécurisé par email pour finaliser votre commande en toute sécurité.</p>
-          </div>
-          
-          <div class="step-card">
-            <div class="step-number">3</div>
-            <div class="step-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                <polyline points="22,6 12,13 2,6"></polyline>
-              </svg>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-heading">Paramètres</h3>
+                <ul class="sidebar-menu">
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link">
+                            <i class="fas fa-user sidebar-menu-icon"></i>
+                            Compte
+                        </a>
+                    </li>
+                </ul>
             </div>
-            <h3 class="step-title">Recevez vos leads</h3>
-            <p class="step-description">Notre équipe vous livre des leads de qualité supérieure, vérifiés et prêts à l'emploi selon le calendrier convenu.</p>
-          </div>
+        </aside>
+
+        <!-- Main content area -->
+        <div class="content-wrapper">
+            <header class="header">
+                <button class="menu-toggle" id="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="header-title">Nouvel agent</div>
+                <div class="user-menu">
+                    <a href="#" class="btn">
+                        <i class="fas fa-question-circle"></i>
+                    </a>
+                    <div class="user-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </header>
+
+            <main class="main-content">
+                <div class="page-header">
+                    <h1 class="page-title">Créer un nouvel agent IA</h1>
+                    <p class="page-description">Configurez votre assistant automatique qui répondra aux emails de prospection et planifiera des rendez-vous pour vous.</p>
+                </div>
+
+                <form id="agent-setup-form">
+                    <!-- API Configuration Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <i class="fas fa-key card-title-icon"></i>
+                                Configuration API
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="form-label" for="webhook-url">URL du Webhook Instantly</label>
+                                <div class="input-group">
+                                    <i class="fas fa-link input-group-icon"></i>
+                                    <input type="text" class="form-control" id="webhook-url" name="webhook-url" placeholder="https://api.instantly.ai/webhook/..." required>
+                                </div>
+                                <p class="form-hint">Vous pouvez trouver cette URL dans les paramètres de votre compte Instantly</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="api-key">Clé API Instantly</label>
+                                <div class="input-group">
+                                    <i class="fas fa-lock input-group-icon"></i>
+                                    <input type="password" class="form-control" id="api-key" name="api-key" placeholder="inst_api_..." required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Personalization Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <i class="fas fa-brain card-title-icon"></i>
+                                Personnalisation IA
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="form-label" for="ai-prompt">Instructions pour l'IA</label>
+                                <textarea class="form-control" id="ai-prompt" name="ai-prompt" placeholder="Décrivez comment votre IA doit répondre. Par exemple: 'Tu es un assistant commercial pour une agence de marketing digital. Réponds de manière amicale et professionnelle. Propose toujours un appel de découverte pour discuter des besoins du prospect...'" required></textarea>
+                                <p class="form-hint">Soyez précis sur le ton, le style et les informations que l'IA doit inclure dans ses réponses</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Calendar Integration Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <i class="fas fa-calendar-alt card-title-icon"></i>
+                                Prise de rendez-vous
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="form-label" for="calendly-link">Lien Calendly</label>
+                                <div class="input-group">
+                                    <i class="fas fa-calendar input-group-icon"></i>
+                                    <input type="text" class="form-control" id="calendly-link" name="calendly-link" placeholder="https://calendly.com/votre-nom">
+                                </div>
+                                <p class="form-hint">Laissez vide si vous ne souhaitez pas proposer de prise de rendez-vous</p>
+                            </div>
+
+                            <div class="toggle-switch">
+                                <label class="switch">
+                                    <input type="checkbox" id="include-calendly" name="include-calendly">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="toggle-label">Inclure automatiquement le lien dans les réponses</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: right; margin-top: 24px;">
+                        <button type="submit" class="btn btn-primary btn-lg" id="create-agent">
+                            <i class="fas fa-robot btn-icon"></i>
+                            <span class="btn-text">Activer mon agent IA</span>
+                        </button>
+                    </div>
+                </form>
+            </main>
         </div>
-      </section>
     </div>
-    
-    <footer class="footer">
-      <div class="footer-logo">UnlimitedLeads</div>
-      <div class="footer-links">
-        <a href="/" class="footer-link">Accueil</a>
-        <a href="/confidentialite" class="footer-link">Politique de confidentialité</a>
-        <a href="/conditions" class="footer-link">Conditions générales</a>
-      </div>
-      <p class="footer-contact">contact@unlimitedleads.co</p>
-    </footer>
-  </div>
+
+    <!-- Success Notification Dialog -->
+    <div class="notification-dialog" id="success-dialog">
+        <div class="notification-content">
+            <div class="notification-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            <h3 class="notification-title">Agent IA activé avec succès!</h3>
+            <p class="notification-message">Votre assistant IA est maintenant prêt à répondre à vos emails de prospection. Les réponses seront automatiquement envoyées selon vos instructions.</p>
+            <div class="notification-actions">
+                <button class="btn btn-primary" id="continue-btn">
+                    <i class="fas fa-check-circle btn-icon"></i>
+                    <span>Continuer</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle mobile menu
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.add('active');
+            document.getElementById('overlay').classList.add('active');
+        });
+
+        document.getElementById('overlay').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.remove('active');
+            document.getElementById('overlay').classList.remove('active');
+        });
+
+        // Form submission
+        document.getElementById('agent-setup-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('create-agent');
+            submitBtn.classList.add('btn-loading');
+            
+            // Simuler un temps de chargement
+            setTimeout(function() {
+                // Ici vous ajouteriez le code pour envoyer les données à votre backend n8n
+                // Exemple avec fetch() ou axios
+                
+                submitBtn.classList.remove('btn-loading');
+                
+                // Afficher le message de succès
+                document.getElementById('success-dialog').classList.add('active');
+            }, 1500);
+        });
+
+        document.getElementById('continue-btn').addEventListener('click', function() {
+            document.getElementById('success-dialog').classList.remove('active');
+        });
+    </script>
 </body>
 </html>
