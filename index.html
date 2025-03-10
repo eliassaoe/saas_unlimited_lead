@@ -673,20 +673,12 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <label class="form-label" for="webhook-url">URL du Webhook Instantly</label>
-                                <div class="input-group">
-                                    <i class="fas fa-link input-group-icon"></i>
-                                    <input type="text" class="form-control" id="webhook-url" name="webhook-url" placeholder="https://api.instantly.ai/webhook/..." required>
-                                </div>
-                                <p class="form-hint">Vous pouvez trouver cette URL dans les paramètres de votre compte Instantly</p>
-                            </div>
-
-                            <div class="form-group">
                                 <label class="form-label" for="api-key">Clé API Instantly</label>
                                 <div class="input-group">
                                     <i class="fas fa-lock input-group-icon"></i>
                                     <input type="password" class="form-control" id="api-key" name="api-key" placeholder="inst_api_..." required>
                                 </div>
+                                <p class="form-hint">Vous pouvez trouver cette clé dans les paramètres de votre compte Instantly</p>
                             </div>
                         </div>
                     </div>
@@ -777,7 +769,7 @@
         });
 
         // Fonction pour créer le workflow N8N
-        async function createWorkflowInN8N(webhookURL, apiKey, aiPrompt, calendlyLink, includeCalendly) {
+        async function createWorkflowInN8N(apiKey, aiPrompt, calendlyLink, includeCalendly) {
             const n8nApiUrl = 'https://eliasse-n8n.onrender.com/rest/workflows';
             const n8nApiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlM2JkMzU1MC05OGYwLTRjM2ItOWJmNC0wMzM0OGU5MjAzOTYiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwiaWF0IjoxNzQxNjQwMDUzfQ.rMdXiVwMqbUogaeRdwekFEK-sC9NER9kRfizH4HqXjg';
             
@@ -834,7 +826,15 @@ Important : Utilise le fuseau horaire France/Paris pour créer les rendez-vous d
 
             // Configurer le workflow avec les paramètres personnalisés
             const workflowData = {
-                "name": "AI Agent"
+                "name": "AI Email Responder",
+                "nodes": [
+                    {
+                        "parameters": {
+                            "promptType": "define",
+                            "text": "={{ $json.reply_text }}\nemail du lead : {{ $json.email_lead }}\nL'email que tu utilise : {{ $json.email_team }} (utilise le meme nom)",
+                            "options": {
+                                "systemMessage": systemMessage
+                            }
                         },
                         "type": "@n8n/n8n-nodes-langchain.agent",
                         "typeVersion": 1.7,
@@ -1004,7 +1004,7 @@ Important : Utilise le fuseau horaire France/Paris pour créer les rendez-vous d
                     {
                         "parameters": {
                             "httpMethod": "POST",
-                            "path": "prosepction",
+                            "path": "prospection",
                             "options": {}
                         },
                         "type": "n8n-nodes-base.webhook",
@@ -1090,11 +1090,6 @@ Important : Utilise le fuseau horaire France/Paris pour créer les rendez-vous d
                                     "index": 0
                                 }
                             ]
-                        ]
-                    },
-                    "HTTP Request": {
-                        "main": [
-                            []
                         ]
                     },
                     "HTTP Request2": {
@@ -1218,7 +1213,7 @@ Important : Utilise le fuseau horaire France/Paris pour créer les rendez-vous d
                     return {
                         success: true,
                         workflowId: result.id,
-                        webhookUrl: `https://eliasse-n8n.onrender.com/webhook/prosepction`
+                        webhookUrl: `https://eliasse-n8n.onrender.com/webhook/prospection`
                     };
                 } else {
                     const errorText = await response.text();
@@ -1271,7 +1266,6 @@ Important : Utilise le fuseau horaire France/Paris pour créer les rendez-vous d
             submitBtn.classList.add('btn-loading');
             
             // Récupérer les valeurs du formulaire
-            const webhookUrl = document.getElementById('webhook-url').value;
             const apiKey = document.getElementById('api-key').value;
             const aiPrompt = document.getElementById('ai-prompt').value;
             const calendlyLink = document.getElementById('calendly-link').value;
@@ -1279,7 +1273,7 @@ Important : Utilise le fuseau horaire France/Paris pour créer les rendez-vous d
             
             try {
                 // Appeler la fonction pour créer le workflow dans N8N
-                const result = await createWorkflowInN8N(webhookUrl, apiKey, aiPrompt, calendlyLink, includeCalendly);
+                const result = await createWorkflowInN8N(apiKey, aiPrompt, calendlyLink, includeCalendly);
                 
                 submitBtn.classList.remove('btn-loading');
                 
@@ -1306,21 +1300,4 @@ Important : Utilise le fuseau horaire France/Paris pour créer les rendez-vous d
         });
     </script>
 </body>
-</html>Réponses e-mail agences de prospection",
-                "nodes": [
-                    {
-                        "parameters": {
-                            "promptType": "define",
-                            "text": "={{ $json.reply_text }}\nemail du lead : {{ $json.email_lead }}\nL'email que tu utilise : {{ $json.email_team }} (utilise le meme nom)",
-                            "options": {
-                                "systemMessage": systemMessage
-                            }
-                        },
-                        "type": "@n8n/n8n-nodes-langchain.agent",
-                        "typeVersion": 1.7,
-                        "position": [
-                            20,
-                            0
-                        ],
-                        "id": "721203fe-2072-4fef-8745-293af7586fe8",
-                        "name": "
+</html>
