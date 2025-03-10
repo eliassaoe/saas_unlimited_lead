@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Cold Email Auto Responder - Playground</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --secondary: #f9fafb;
+            --dark: #111827;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --green-500: #10b981;
+            --green-600: #059669;
+            --red-500: #ef4444;
+            --yellow-500: #f59e0b;
+            --blue-50: #eff6ff;
+            --blue-100: #dbeafe;
+            --blue-500: #3b82f6;
+            --container-width: 1280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f9fafb;
+            color: var(--gray-800);
+            line-height: 1.5;
+        }
+
+        /* Layout styles */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 230px;
+            background-color: white;
+            border-right: 1px solid var(--gray-200);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 20;
+            transition: transform 0.3s ease;
+        }
+
+        .content-wrapper {
+            flex: 1;
+            margin-left: 230px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content {
+            padding: 24px 32px;
+            max-width: var(--container-width);
+            margin: 0 auto;
+        }
+
+        /* Header styles */
+        .header {
+            height: 64px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            padding: 0 32px;
+            background-color: white;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--gray-700);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 4px;
+            margin-right: 16px;
+        }
+
+        .header-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-600);
+        }
+
+        /* Logo styles */
+        .logo-container {
+            height: 64px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .logo {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .logo-icon {
+            font-size: 1.25rem;
+        }
+
+        /* Sidebar menu styles */
+        .sidebar-section {
+            padding: 20px 0;
+        }
+
+        .sidebar-section:not(:last-child) {
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .sidebar-heading {
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            color: var(--gray-500);
+            padding: 0 20px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu-item {
+            position: relative;
+        }
+
+        .sidebar-menu-link {
+            display: flex;
+            align-items: center;
+            padding: 8px 20px;
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .sidebar-menu-link:hover {
+            background-color: var(--gray-50);
+            color: var(--primary);
+        }
+
+        .sidebar-menu-link.active {
+            color: var(--primary);
+            background-color: var(--blue-50);
+            font-weight: 600;
+        }
+
+        .sidebar-menu-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background-color: var(--primary);
+        }
+
+        .sidebar-menu-icon {
+            margin-right: 12px;
+            width: 16px;
+            text-align: center;
+        }
+
+        /* Page content styles */
+        .page-header {
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title-section {
+            flex: 1;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .page-description {
+            color: var(--gray-600);
+            max-width: 640px;
+        }
+
+        /* Card styles */
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        /* Button styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 16px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-outline {
+            background-color: white;
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--gray-50);
+        }
+
+        .btn-icon {
+            margin-right: 8px;
+        }
+
+        /* Form styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            color: var(--gray-800);
+            background-color: white;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .form-hint {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+
+        .select-container {
+            position: relative;
+        }
+
+        .select-container::after {
+            content: '\f078';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-500);
+            pointer-events: none;
+            font-size: 0.75rem;
+        }
+
+        select.form-control {
+            appearance: none;
+            padding-right: 32px;
+        }
+
+        /* Email composer styles */
+        .email-composer {
+            background-color: white;
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .email-composer-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .email-composer-fields {
+            margin-bottom: 0;
+        }
+
+        .email-field {
+            display: flex;
+            margin-bottom: 12px;
+        }
+
+        .email-field:last-child {
+            margin-bottom: 0;
+        }
+
+        .email-field-label {
+            width: 80px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-700);
+            padding-top: 10px;
+        }
+
+        .email-field-input {
+            flex: 1;
+        }
+
+        .email-composer-body {
+            padding: 16px;
+        }
+
+        .email-content {
+            width: 100%;
+            min-height: 250px;
+            padding: 12px;
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            color: var(--gray-800);
+            resize: vertical;
+        }
+
+        .email-content:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .email-composer-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .template-dropdown {
+            position: relative;
+        }
+
+        .template-dropdown-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: white;
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            cursor: pointer;
+        }
+
+        .template-dropdown-button:hover {
+            background-color: var(--gray-50);
+        }
+
+        .template-dropdown-menu {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            background-color: white;
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            width: 250px;
+            margin-bottom: 8px;
+            z-index: 10;
+            display: none;
+        }
+
+        .template-dropdown.active .template-dropdown-menu {
+            display: block;
+        }
+
+        .template-item {
+            padding: 8px 12px;
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            cursor: pointer;
+        }
+
+        .template-item:hover {
+            background-color: var(--gray-50);
+        }
+
+        .send-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .send-button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Email response styles */
+        .email-response {
+            background-color: white;
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 32px;
+            display: none;
+        }
+
+        .email-response-header {
+            background-color: var(--blue-50);
+            padding: 16px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .response-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .response-from {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .response-time {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        .response-subject {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .response-to {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+        }
+
+        .email-response-body {
+            padding: 16px;
+            font-size: 0.875rem;
+            color: var(--gray-800);
+            line-height: 1.6;
+        }
+
+        /* Loading indicator */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .loading-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            background-color: white;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .loading-text {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-700);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--gray-200);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spinner 1s linear infinite;
+        }
+
+        @keyframes spinner {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Overlay for mobile menu */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 15;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 991px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .content-wrapper {
+                margin-left: 0;
+            }
+
+            .header {
+                padding: 0 16px;
+            }
+
+            .header-title {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .logo {
+                font-size: 1rem;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .main-content {
+                padding: 16px;
+            }
+
+            .card-body {
+                padding: 16px;
+            }
+
+            .email-composer-footer {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .template-dropdown {
+                width: 100%;
+            }
+
+            .template-dropdown-button {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .send-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-title {
+                display: none;
+            }
+
+            .page-title {
+                font-size: 1.25rem;
+            }
+
+            .email-field {
+                flex-direction: column;
+            }
+
+            .email-field-label {
+                width: 100%;
+                margin-bottom: 4px;
+                padding-top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Mobile menu overlay -->
+        <div class="overlay" id="overlay"></div>
+
+        <!-- Sidebar navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo-container">
+                <div class="logo">
+                    <i class="fas fa-envelope-open-text logo-icon"></i>
+                    <span>Cold Email Responder</span>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-heading">Principal</h3>
+                <ul class="sidebar-menu">
+                    <li class="sidebar-menu-item">
+                        <a href="nouvel-agent.html" class="sidebar-menu-link">
+                            <i class="fas fa-plus-circle sidebar-menu-icon"></i>
+                            Nouvel agent
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="mes-agents.html" class="sidebar-menu-link">
+                            <i class="fas fa-robot sidebar-menu-icon"></i>
+                            Mes agents
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="playground.html" class="sidebar-menu-link active">
+                            <i class="fas fa-gamepad sidebar-menu-icon"></i>
+                            Playground
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-heading">Paramètres</h3>
+                <ul class="sidebar-menu">
+                    <li class="sidebar-menu-item">
+                        <a href="compte.html" class="sidebar-menu-link">
+                            <i class="fas fa-user sidebar-menu-icon"></i>
+                            Compte
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main content area -->
+        <div class="content-wrapper">
+            <header class="header">
+                <button class="menu-toggle" id="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="header-title">Playground</div>
+                <div class="user-menu">
+                    <a href="#" class="btn">
+                        <i class="fas fa-question-circle"></i>
+                    </a>
+                    <div class="user-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </header>
+
+            <main class="main-content">
+                <div class="page-header">
+                    <div class="page-title-section">
+                        <h1 class="page-title">Testez votre agent IA</h1>
+                        <p class="page-description">Envoyez un email test pour voir comment votre agent IA répond aux demandes</p>
+                    </div>
+                    <div class="select-container" style="width: 200px;">
+                        <select class="form-control" id="agent-selector">
+                            <option value="agent1">Agent commercial</option>
+                            <option value="agent2">Agent support</option>
+                            <option value="agent3">Agent rendez-vous</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-envelope" style="color: var(--primary);"></i>
+                            Composer un email test
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="email-composer">
+                            <div class="email-composer-header">
+                                <div class="email-composer-fields">
+                                    <div class="email-field">
+                                        <div class="email-field-label">De:</div>
+                                        <div class="email-field-input">
+                                            <input type="text" class="form-control" id="email-from" value="prospect@example.com">
+                                        </div>
+                                    </div>
+                                    <div class="email-field">
+                                        <div class="email-field-label">À:</div>
+                                        <div class="email-field-input">
+                                            <input type="text" class="form-control" id="email-to" value="contact@yourcompany.com" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="email-field">
+                                        <div class="email-field-label">Objet:</div>
+                                        <div class="email-field-input">
+                                            <input type="text" class="form-control" id="email-subject" placeholder="Saisissez l'objet de l'email">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="email-composer-body">
+                                <textarea class="email-content" id="email-content" placeholder="Rédigez votre email ici..."></textarea>
+                            </div>
+                            <div class="email-composer-footer">
+                                <div class="template-dropdown" id="template-dropdown">
+                                    <button class="template-dropdown-button" id="template-button">
+                                        <i class="fas fa-file-alt"></i>
+                                        Utiliser un modèle
+                                        <i class="fas fa-chevron-up"></i>
+                                    </button>
+                                    <div class="template-dropdown-menu">
+                                        <div class="template-item" data-template="info">Demande d'information</div>
+                                        <div class="template-item" data-template="price">Demande de prix</div>
+                                        <div class="template-item" data-template="followup">Suivi après rendez-vous</div>
+                                        <div class="template-item" data-template="technical">Question technique</div>
+                                        <div class="template-item" data-template="complaint">Réclamation</div>
+                                    </div>
+                                </div>
+                                <button class="send-button" id="send-button">
+                                    <i class="fas fa-paper-plane"></i>
+                                    Envoyer l'email
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-response" id="email-response">
+                    <div class="email-response-header">
+                        <div class="response-meta">
+                            <div class="response-from" id="response-from">Agent Commercial &lt;agent@yourcompany.com&gt;</div>
+                            <div class="response-time" id="response-time">12:45</div>
+                        </div>
+                        <div class="response-subject" id="response-subject">Re: Demande d'information sur vos services</div>
+                        <div class="response-to" id="response-to">À: prospect@example.com</div>
+                    </div>
+                    <div class="email-response-body" id="response-body">
+                        <!-- La réponse de l'agent sera insérée ici -->
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <i class="fas fa-sliders-h" style="color: var(--primary);"></i>
+                            Paramètres de l'agent
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="form-label" for="agent-instructions">Instructions de l'agent</label>
+                            <textarea class="form-control" id="agent-instructions" rows="5">Tu es un assistant commercial pour une agence de marketing digital. Tu réponds de manière professionnelle et amicale. Tu proposes toujours un appel de découverte pour comprendre les besoins du prospect et tu partages un lien calendly pour faciliter la prise de rendez-vous. Tu dois être concis mais précis, et montrer de l'enthousiasme pour aider le prospect.</textarea>
+                        </div>
+                        <div style="display: flex; justify-content: flex-end;">
+                            <button class="btn btn-primary" id="update-instructions">
+                                <i class="fas fa-sync-alt btn-icon"></i>
+                                Mettre à jour les instructions
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">L'agent analyse votre email...</div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle mobile menu
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.add('active');
+            document.getElementById('overlay').classList.add('active');
+        });
+
+        document.getElementById('overlay').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.remove('active');
+            document.getElementById('overlay').classList.remove('active');
+        });
+
+        // Template dropdown
+        const templateDropdown = document.getElementById('template-dropdown');
+        const templateButton = document.getElementById('template-button');
+        const templateItems = document.querySelectorAll('.template-item');
+        const emailSubject = document.getElementById('email-subject');
+        const emailContent = document.getElementById('email-content');
+
+        templateButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            templateDropdown.classList.toggle('active');
+        });
+
+        document.addEventListener('click', function() {
+            templateDropdown.classList.remove('active');
+        });
+
+        // Email templates
+        const templates = {
+            info: {
+                subject: "Demande d'information sur vos services",
+                content: "Bonjour,\n\nJe suis actuellement à la recherche d'une agence pour m'accompagner sur ma stratégie marketing digital. J'ai découvert votre entreprise et je suis intéressé par vos services.\n\nPouvez-vous me donner plus d'informations sur vos prestations et vos tarifs ?\n\nMerci d'avance pour votre retour.\n\nCordialement,\nJean Dupont"
+            },
+            price: {
+                subject: "Demande de devis pour campagne marketing",
+                content: "Bonjour,\n\nJe souhaiterais obtenir un devis pour une campagne de publicité en ligne. Notre entreprise est dans le secteur de la santé et nous aimerions augmenter notre visibilité.\n\nPouvez-vous me communiquer vos tarifs et conditions pour ce type de prestation ?\n\nMerci,\nMarie Martin"
+            },
+            followup: {
+                subject: "Suivi de notre rendez-vous du 5 mars",
+                content: "Bonjour,\n\nSuite à notre rendez-vous de la semaine dernière, je voulais savoir où en était l'élaboration de la proposition commerciale dont nous avions discuté.\n\nAvez-vous pu avancer sur ce sujet ?\n\nCordialement,\nThomas Bernard"
+            },
+            technical: {
+                subject: "Problème technique avec votre plateforme",
+                content: "Bonjour,\n\nJ'ai rencontré un problème technique sur votre plateforme. Je n'arrive pas à exporter les données dans le format CSV comme expliqué dans la documentation.\n\nPouvez-vous m'aider à résoudre ce problème rapidement ?\n\nMerci,\nSophie Dubois"
+            },
+            complaint: {
+                subject: "Insatisfaction concernant les résultats obtenus",
+                content: "Bonjour,\n\nJe vous contacte car je suis déçu des résultats obtenus après 3 mois de collaboration. Les objectifs fixés initialement n'ont pas été atteints, malgré l'investissement consenti.\n\nJ'aimerais avoir un échange avec vous pour comprendre ce qui n'a pas fonctionné et envisager des solutions.\n\nBien cordialement,\nPierre Lambert"
+            }
+        };
+
+        templateItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const templateKey = this.getAttribute('data-template');
+                const template = templates[templateKey];
+                
+                emailSubject.value = template.subject;
+                emailContent.value = template.content;
+                
+                templateDropdown.classList.remove('active');
+            });
+        });
+
+        // Send email and get response
+        const sendButton = document.getElementById('send-button');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const emailResponse = document.getElementById('email-response');
+        const responseFrom = document.getElementById('response-from');
+        const responseTime = document.getElementById('response-time');
+        const responseSubject = document.getElementById('response-subject');
+        const responseTo = document.getElementById('response-to');
+        const responseBody = document.getElementById('response-body');
+        const emailFrom = document.getElementById('email-from');
+
+        sendButton.addEventListener('click', function() {
+            // Validation
+            if (!emailSubject.value.trim() || !emailContent.value.trim()) {
+                alert('Veuillez remplir l\'objet et le contenu de l\'email.');
+                return;
+            }
+
+            // Show loading
+            loadingOverlay.classList.add('active');
+
+            // Simulate response delay
+            setTimeout(function() {
+                // Hide loading
+                loadingOverlay.classList.remove('active');
+                
+                // Update response details
+                const selectedAgent = document.getElementById('agent-selector').options[document.getElementById('agent-selector').selectedIndex].text;
+                responseFrom.textContent = `${selectedAgent} <agent@yourcompany.com>`;
+                
+                const now = new Date();
+                const hours = now.getHours().toString().padStart(2, '0');
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                responseTime.textContent = `${hours}:${minutes}`;
+                
+                responseSubject.textContent = `Re: ${emailSubject.value}`;
+                responseTo.textContent = `À: ${emailFrom.value}`;
+                
+                // Generate response based on email content
+                responseBody.innerHTML = generateResponse(emailContent.value, selectedAgent, emailSubject.value);
+                
+                // Show response
+                emailResponse.style.display = 'block';
+                
+                // Scroll to response
+                emailResponse.scrollIntoView({ behavior: 'smooth' });
+            }, 2000);
+        });
+
+        function generateResponse(content, agentType, subject) {
+            const contentLower = content.toLowerCase();
+            
+            // Get current date for email formatting
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateString = now.toLocaleDateString('fr-FR', options);
+            
+            // Common email signature
+            const signature = `<br><br>Cordialement,<br><br>${agentType}<br>Digital Marketing Pro<br>Tel: +33 1 23 45 67 89`;
+            
+            // Different response based on email content
+            let responseText = '';
+            
+            if (contentLower.includes('prix') || contentLower.includes('tarif') || contentLower.includes('devis') || subject.toLowerCase().includes('prix')) {
+                responseText = `Bonjour,<br><br>
+                Merci pour votre demande concernant nos tarifs et prestations.<br><br>
+                Nos forfaits de marketing digital débutent à 800€/mois avec un engagement de 3 mois. Chaque offre est personnalisée en fonction de vos besoins spécifiques, de vos objectifs et de votre secteur d'activité.<br><br>
+                Pour vous proposer un devis précis, j'aurais besoin d'en savoir plus sur votre entreprise et vos attentes. Je vous propose de planifier un appel de 30 minutes pour discuter de votre projet plus en détail.<br><br>
+                Vous pouvez réserver un créneau directement via mon calendrier : <a href="#">https://calendly.com/${agentType.toLowerCase().replace(' ', '')}/decouverte</a><br><br>
+                Je reste à votre disposition pour toute question complémentaire.`;
+            } 
+            else if (contentLower.includes('rendez-vous') || contentLower.includes('rdv') || subject.toLowerCase().includes('rendez-vous') || subject.toLowerCase().includes('suivi')) {
+                responseText = `Bonjour,<br><br>
+                Merci pour votre message de suivi.<br><br>
+                J'ai bien avancé sur la proposition commerciale dont nous avons discuté lors de notre rendez-vous. Elle est en cours de finalisation et je devrais pouvoir vous l'envoyer d'ici demain en fin de journée.<br><br>
+                Si vous souhaitez échanger sur ce sujet ou si vous avez des questions supplémentaires, n'hésitez pas à réserver un créneau dans mon agenda : <a href="#">https://calendly.com/${agentType.toLowerCase().replace(' ', '')}/suivi</a><br><br>
+                Je vous remercie pour votre patience et reste à votre écoute.`;
+            }
+            else if (contentLower.includes('problème') || contentLower.includes('bug') || contentLower.includes('technique') || subject.toLowerCase().includes('problème') || subject.toLowerCase().includes('technique')) {
+                responseText = `Bonjour,<br><br>
+                Je vous remercie d'avoir signalé ce problème technique.<br><br>
+                J'ai transmis votre demande à notre équipe technique qui va examiner le souci d'exportation CSV que vous rencontrez. Il s'agit probablement d'un bug temporaire.<br><br>
+                En attendant, pourriez-vous essayer les solutions suivantes ?<br>
+                - Vider le cache de votre navigateur<br>
+                - Essayer un autre navigateur (Chrome ou Firefox)<br>
+                - Exporter dans un autre format (Excel ou PDF) si disponible<br><br>
+                Notre équipe technique vous contactera sous 24h avec une solution. Si vous préférez une assistance immédiate, vous pouvez réserver un appel rapide avec notre support : <a href="#">https://calendly.com/${agentType.toLowerCase().replace(' ', '')}/support</a><br><br>
+                Je vous présente nos excuses pour ce désagrément.`;
+            }
+            else if (contentLower.includes('déçu') || contentLower.includes('insatisf') || contentLower.includes('résultat') || subject.toLowerCase().includes('insatisfaction') || subject.toLowerCase().includes('déçu')) {
+                responseText = `Bonjour,<br><br>
+                Je vous remercie pour votre message et je comprends votre préoccupation concernant les résultats de notre collaboration.<br><br>
+                Je suis sincèrement désolé que les objectifs fixés n'aient pas été atteints comme prévu. Votre satisfaction est notre priorité et nous prenons très au sérieux votre retour.<br><br>
+                Je propose que nous organisions un appel dans les plus brefs délais pour analyser ensemble la situation, comprendre ce qui n'a pas fonctionné et définir un plan d'action concret pour améliorer les résultats.<br><br>
+                Vous pouvez réserver un créneau prioritaire ici : <a href="#">https://calendly.com/${agentType.toLowerCase().replace(' ', '')}/urgent</a><br><br>
+                En attendant, je vais préparer un rapport détaillé sur votre campagne pour que nous puissions l'examiner ensemble.`;
+            }
+            else {
+                responseText = `Bonjour,<br><br>
+                Merci pour votre message et l'intérêt que vous portez à nos services de marketing digital.<br><br>
+                Digital Marketing Pro accompagne depuis plus de 5 ans des entreprises de toutes tailles dans leur stratégie digitale. Nous proposons des solutions personnalisées incluant :<br><br>
+                • Stratégie digitale globale<br>
+                • SEO et content marketing<br>
+                • Publicité en ligne (Google Ads, Meta, LinkedIn)<br>
+                • Gestion des réseaux sociaux<br>
+                • Email marketing<br>
+                • Analyse de performance<br><br>
+                Pour vous donner des informations plus précises adaptées à votre situation, j'aimerais en savoir plus sur vos objectifs et votre activité. Je vous propose de planifier un appel découverte de 30 minutes, sans engagement.<br><br>
+                Vous pouvez réserver directement un créneau via ce lien : <a href="#">https://calendly.com/${agentType.toLowerCase().replace(' ', '')}/decouverte</a><br><br>
+                Je reste à votre disposition pour toute information complémentaire.`;
+            }
+            
+            // Formulate the complete email
+            const fullResponse = `${responseText}${signature}`;
+            
+            return fullResponse;
+        }
+
+        // Update instructions button
+        document.getElementById('update-instructions').addEventListener('click', function() {
+            this.innerHTML = '<i class="fas fa-check btn-icon"></i> Instructions mises à jour';
+            this.style.backgroundColor = '#10b981';
+            
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-sync-alt btn-icon"></i> Mettre à jour les instructions';
+                this.style.backgroundColor = '';
+            }, 2000);
+        });
+
+        // Change agent
+        document.getElementById('agent-selector').addEventListener('change', function() {
+            const selectedAgent = this.options[this.selectedIndex].text;
+            
+            // Update instructions based on agent type
+            const instructionsField = document.getElementById('agent-instructions');
+            
+            if (selectedAgent === 'Agent commercial') {
+                instructionsField.value = "Tu es un assistant commercial pour une agence de marketing digital. Tu réponds de manière professionnelle et amicale. Tu proposes toujours un appel de découverte pour comprendre les besoins du prospect et tu partages un lien calendly pour faciliter la prise de rendez-vous. Tu dois être concis mais précis, et montrer de l'enthousiasme pour aider le prospect.";
+            } else if (selectedAgent === 'Agent support') {
+                instructionsField.value = "Tu es un assistant de support technique. Tu aides à résoudre les problèmes techniques de façon claire et pédagogique. Tu demandes des informations précises pour mieux diagnostiquer les problèmes. Tu te montres patient et compréhensif face aux difficultés rencontrées par les utilisateurs.";
+            } else if (selectedAgent === 'Agent rendez-vous') {
+                instructionsField.value = "Tu es un assistant spécialisé dans la prise de rendez-vous. Tu proposes systématiquement des créneaux via Calendly et tu facilites l'organisation des réunions. Tu demandes les informations essentielles pour préparer le rendez-vous (type de réunion, participants, sujets à aborder) et tu confirmes toujours les détails.";
+            }
+            
+            // Hide response if it was visible
+            emailResponse.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
