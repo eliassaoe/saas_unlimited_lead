@@ -587,7 +587,7 @@
             }
         });
         
-        // Form validation
+        // Form validation and Airtable submission
         const form = document.querySelector('.signup-form');
         form.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -650,10 +650,83 @@
             }
             
             if (isValid) {
-                // Form is valid, you can submit it
-                alert('Inscription réussie ! Bienvenue chez Cold Email Responder.');
-                // In real-world, you would submit the form or use fetch/ajax here
-                // form.submit();
+                // Get form data
+                const firstName = document.getElementById('firstname').value;
+                const lastName = document.getElementById('lastname').value;
+                const email = document.getElementById('email').value;
+                const company = document.getElementById('company').value;
+                const newsletter = document.getElementById('newsletter').checked;
+                
+                // Show loading state
+                const submitButton = document.querySelector('.submit-button');
+                const originalButtonText = submitButton.textContent;
+                submitButton.disabled = true;
+                submitButton.textContent = 'Inscription en cours...';
+
+                // Create data object for the webhook
+                const userData = {
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    company: company,
+                    newsletter: newsletter,
+                    registrationDate: new Date().toISOString(),
+                    status: "Essai gratuit"
+                };
+
+                // Send data to webhook
+                fetch('https://eliasse-n8n.onrender.com/webhook/32c00974-7b89-407a-9bad-2448b73acc8f', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur lors de l\'inscription');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Success! Redirect or show success message
+                    console.log('Inscription réussie!', data);
+                    
+                    // Show success message and redirect
+                    submitButton.textContent = 'Inscription réussie!';
+                    submitButton.style.backgroundColor = 'var(--green-600)';
+                    
+                    // Redirect to dashboard or welcome page after delay
+                    setTimeout(() => {
+                        window.location.href = '/dashboard.html'; // Modifier selon votre structure
+                    }, 1500);
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    // Show error message
+                    submitButton.textContent = originalButtonText;
+                    submitButton.disabled = false;
+                    
+                    // Display error notification
+                    const formContainer = document.querySelector('.signup-container');
+                    const errorNotification = document.createElement('div');
+                    errorNotification.className = 'error-notification';
+                    errorNotification.style.backgroundColor = 'var(--red-500)';
+                    errorNotification.style.color = 'white';
+                    errorNotification.style.padding = '0.75rem';
+                    errorNotification.style.borderRadius = '0.375rem';
+                    errorNotification.style.marginBottom = '1rem';
+                    errorNotification.style.fontSize = '0.875rem';
+                    errorNotification.style.textAlign = 'center';
+                    errorNotification.textContent = 'Une erreur s\'est produite lors de l\'inscription. Veuillez réessayer.';
+                    
+                    formContainer.insertBefore(errorNotification, formContainer.firstChild);
+                    
+                    // Remove error after 5 seconds
+                    setTimeout(() => {
+                        errorNotification.remove();
+                    }, 5000);
+                });
             }
         });
         
