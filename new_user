@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Créer un compte - Cold Email Auto Responder</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6d28d9;            /* Violet indigo-600 */
+            --primary-hover: #5b21b6;      /* Violet indigo-700 */
+            --primary-light: #ede9fe;      /* Violet indigo-100 */
+            --secondary: #f9fafb;
+            --dark: #111827;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --green-500: #10b981;
+            --green-600: #059669;
+            --red-500: #ef4444;
+            --yellow-500: #f59e0b;
+            --container-width: 1200px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        .page-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar styles */
+        .navbar {
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 0.75rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .brand-icon {
+            margin-right: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        /* Signup section */
+        .signup-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1.5rem;
+            min-height: calc(100vh - 130px);
+        }
+
+        .signup-container {
+            max-width: 480px;
+            width: 100%;
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .floating-element {
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(45deg, rgba(124, 58, 237, 0.1), rgba(124, 58, 237, 0.2));
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            z-index: 1;
+        }
+
+        .signup-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .signup-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.75rem;
+        }
+
+        .signup-subtitle {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+        }
+
+
+
+        .signup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.375rem;
+        }
+
+        .form-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-700);
+        }
+
+        .form-input {
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            border: 1px solid var(--gray-300);
+            background-color: white;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-input {
+            margin-top: 0.25rem;
+        }
+
+        .checkbox-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        .checkbox-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .checkbox-link:hover {
+            text-decoration: underline;
+        }
+
+        .submit-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.875rem;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+
+        .submit-button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .login-link-container {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        .login-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-link:hover {
+            text-decoration: underline;
+        }
+
+        .info-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-badge-icon {
+            margin-right: 0.5rem;
+        }
+
+        /* Password strength indicator */
+        .password-strength {
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .strength-bars {
+            display: flex;
+            gap: 0.25rem;
+            flex: 1;
+        }
+
+        .strength-bar {
+            height: 4px;
+            flex: 1;
+            background-color: var(--gray-200);
+            border-radius: 2px;
+        }
+
+        .strength-bar.active-1 {
+            background-color: var(--red-500);
+        }
+
+        .strength-bar.active-2 {
+            background-color: var(--yellow-500);
+        }
+
+        .strength-bar.active-3,
+        .strength-bar.active-4 {
+            background-color: var(--green-500);
+        }
+
+        .strength-text {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--gray-500);
+        }
+
+        .strength-text.weak {
+            color: var(--red-500);
+        }
+
+        .strength-text.medium {
+            color: var(--yellow-500);
+        }
+
+        .strength-text.strong {
+            color: var(--green-500);
+        }
+
+        /* Error styles */
+        .form-error {
+            font-size: 0.75rem;
+            color: var(--red-500);
+            margin-top: 0.25rem;
+        }
+
+        .error-input {
+            border-color: var(--red-500);
+        }
+
+        .error-input:focus {
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: white;
+            border-top: 1px solid var(--gray-200);
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .footer-link {
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .footer-link:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .signup-container {
+                padding: 2rem 1.5rem;
+                max-width: 90%;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 1.25rem;
+            }
+
+            .signup-title {
+                font-size: 1.5rem;
+            }
+            
+            .navbar-container {
+                flex-direction: column;
+                gap: 0.75rem;
+                padding: 0.75rem 1rem;
+            }
+            
+            .nav-links {
+                width: 100%;
+                justify-content: space-around;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .signup-container {
+                padding: 1.5rem 1.25rem;
+                max-width: 95%;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            }
+            
+            .signup-title {
+                font-size: 1.35rem;
+            }
+            
+            .signup-subtitle {
+                font-size: 0.875rem;
+            }
+            
+            .submit-button {
+                padding: 0.75rem;
+                font-size: 0.95rem;
+            }
+            
+            .info-badge {
+                padding: 0.375rem 0.625rem;
+                font-size: 0.8125rem;
+            }
+            
+            .form-label {
+                font-size: 0.8125rem;
+            }
+            
+            .form-input {
+                padding: 0.675rem;
+                font-size: 0.9rem;
+            }
+            
+            .footer {
+                padding: 1.25rem 1rem;
+            }
+            
+            .footer-links {
+                flex-wrap: wrap;
+                gap: 1rem 1.25rem;
+            }
+        }
+        
+        @media (max-width: 350px) {
+            .signup-container {
+                padding: 1.25rem 1rem;
+            }
+            
+            .checkbox-label {
+                font-size: 0.8125rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Navigation bar -->
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="#" class="brand">
+                    <i class="fas fa-envelope-open-text brand-icon"></i>
+                    Cold Email Responder
+                </a>
+                <div class="nav-links">
+                    <a href="#" class="nav-link">Accueil</a>
+                    <a href="#" class="nav-link">Fonctionnalités</a>
+                    <a href="#" class="nav-link">Tarifs</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Signup section -->
+        <section class="signup-section">
+            <div class="signup-container">
+                <div class="floating-element"></div>
+                <div class="signup-header">
+                    <h1 class="signup-title">Créer votre compte</h1>
+                    <p class="signup-subtitle">Commencez dès aujourd'hui avec votre essai gratuit de 14 jours</p>
+                </div>
+
+                <div class="info-badge">
+                    <i class="fas fa-info-circle info-badge-icon"></i>
+                    Pas de carte de crédit requise
+                </div>
+
+                <form class="signup-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstname" class="form-label">Prénom</label>
+                            <input type="text" id="firstname" name="firstname" class="form-input" placeholder="Votre prénom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname" class="form-label">Nom</label>
+                            <input type="text" id="lastname" name="lastname" class="form-input" placeholder="Votre nom" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email professionnel</label>
+                        <input type="email" id="email" name="email" class="form-input" placeholder="vous@entreprise.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company" class="form-label">Nom de l'entreprise</label>
+                        <input type="text" id="company" name="company" class="form-input" placeholder="Votre entreprise" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Mot de passe</label>
+                        <input type="password" id="password" name="password" class="form-input" placeholder="8+ caractères" required>
+                        
+                        <div class="password-strength">
+                            <div class="strength-bars">
+                                <div class="strength-bar active-1"></div>
+                                <div class="strength-bar"></div>
+                                <div class="strength-bar"></div>
+                                <div class="strength-bar"></div>
+                            </div>
+                            <span class="strength-text weak">Faible</span>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="terms" name="terms" class="checkbox-input" required>
+                        <label for="terms" class="checkbox-label">
+                            J'accepte les <a href="#" class="checkbox-link">Conditions d'utilisation</a> et la <a href="#" class="checkbox-link">Politique de confidentialité</a>
+                        </label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="newsletter" name="newsletter" class="checkbox-input">
+                        <label for="newsletter" class="checkbox-label">
+                            J'accepte de recevoir des emails concernant les produits, les mises à jour et les événements (facultatif)
+                        </label>
+                    </div>
+
+                    <button type="submit" class="submit-button">Créer mon compte</button>
+                </form>
+
+                <div class="login-link-container">
+                    Vous avez déjà un compte? <a href="#" class="login-link">Connexion</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 Cold Email Responder. Tous droits réservés.</p>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Mentions légales</a>
+                <a href="#" class="footer-link">Politique de confidentialité</a>
+                <a href="#" class="footer-link">Conditions d'utilisation</a>
+                <a href="#" class="footer-link">Contact</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Simple password strength checker for demo purposes
+        const passwordInput = document.getElementById('password');
+        const strengthBars = document.querySelectorAll('.strength-bar');
+        const strengthText = document.querySelector('.strength-text');
+        
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            let strength = 0;
+            
+            if (password.length >= 8) strength++;
+            if (password.match(/[A-Z]/)) strength++;
+            if (password.match(/[0-9]/)) strength++;
+            if (password.match(/[^A-Za-z0-9]/)) strength++;
+            
+            strengthBars.forEach((bar, index) => {
+                bar.className = 'strength-bar';
+                if (index < strength) bar.classList.add(`active-${strength}`);
+            });
+            
+            strengthText.className = 'strength-text';
+            if (strength === 0) {
+                strengthText.textContent = '';
+            } else if (strength <= 1) {
+                strengthText.textContent = 'Faible';
+                strengthText.classList.add('weak');
+            } else if (strength <= 2) {
+                strengthText.textContent = 'Moyen';
+                strengthText.classList.add('medium');
+            } else {
+                strengthText.textContent = 'Fort';
+                strengthText.classList.add('strong');
+            }
+        });
+        
+        // Form validation
+        const form = document.querySelector('.signup-form');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simple validation example - can be expanded as needed
+            let isValid = true;
+            const inputs = form.querySelectorAll('input[required]');
+            
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    isValid = false;
+                    input.classList.add('error-input');
+                    
+                    // Create or update error message
+                    let errorMsg = input.parentElement.querySelector('.form-error');
+                    if (!errorMsg) {
+                        errorMsg = document.createElement('span');
+                        errorMsg.className = 'form-error';
+                        input.parentElement.appendChild(errorMsg);
+                    }
+                    errorMsg.textContent = 'Ce champ est requis';
+                } else {
+                    input.classList.remove('error-input');
+                    const errorMsg = input.parentElement.querySelector('.form-error');
+                    if (errorMsg) errorMsg.remove();
+                }
+            });
+            
+            // Email validation
+            const emailInput = document.getElementById('email');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (emailInput.value && !emailRegex.test(emailInput.value)) {
+                isValid = false;
+                emailInput.classList.add('error-input');
+                
+                let errorMsg = emailInput.parentElement.querySelector('.form-error');
+                if (!errorMsg) {
+                    errorMsg = document.createElement('span');
+                    errorMsg.className = 'form-error';
+                    emailInput.parentElement.appendChild(errorMsg);
+                }
+                errorMsg.textContent = 'Veuillez entrer une adresse email valide';
+            }
+            
+            // Password validation
+            const passwordInput = document.getElementById('password');
+            if (passwordInput.value && passwordInput.value.length < 8) {
+                isValid = false;
+                passwordInput.classList.add('error-input');
+                
+                let errorMsg = passwordInput.parentElement.querySelector('.form-error');
+                if (!errorMsg) {
+                    errorMsg = document.createElement('span');
+                    errorMsg.className = 'form-error';
+                    // Add before password strength indicator
+                    const strengthIndicator = passwordInput.parentElement.querySelector('.password-strength');
+                    passwordInput.parentElement.insertBefore(errorMsg, strengthIndicator);
+                }
+                errorMsg.textContent = 'Le mot de passe doit contenir au moins 8 caractères';
+            }
+            
+            if (isValid) {
+                // Form is valid, you can submit it
+                alert('Inscription réussie ! Bienvenue chez Cold Email Responder.');
+                // In real-world, you would submit the form or use fetch/ajax here
+                // form.submit();
+            }
+        });
+        
+        // Clear validation errors on input
+        const inputs = form.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                this.classList.remove('error-input');
+                const errorMsg = this.parentElement.querySelector('.form-error');
+                if (errorMsg) errorMsg.remove();
+            });
+        });
+    </script>
+</body>
+</html>
