@@ -611,12 +611,7 @@
                             Mes agents
                         </a>
                     </li>
-                    <li class="sidebar-menu-item">
-                        <a href="#" class="sidebar-menu-link">
-                            <i class="fas fa-envelope sidebar-menu-icon"></i>
-                            Conversations
-                        </a>
-                    </li>
+                    <!-- Menu Conversations supprimé comme demandé -->
                     <li class="sidebar-menu-item">
                         <a href="https://eliassaoe.github.io/saas_unlimited_lead/playground" class="sidebar-menu-link">
                             <i class="fas fa-flask sidebar-menu-icon"></i>
@@ -663,6 +658,23 @@
                 </div>
 
                 <form id="agent-setup-form">
+                    <!-- Nom de l'agent Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <i class="fas fa-robot card-title-icon"></i>
+                                Identification de l'agent
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="form-label" for="agent-name">Nom de l'agent</label>
+                                <input type="text" class="form-control" id="agent-name" name="agent-name" placeholder="Ex: Agent commercial, Assistant SEO..." required>
+                                <p class="form-hint">Ce nom vous aidera à identifier cet agent dans votre liste</p>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <!-- API Configuration Card -->
                     <div class="card">
                         <div class="card-header">
@@ -768,496 +780,6 @@
             document.getElementById('overlay').classList.remove('active');
         });
 
-        // Fonction pour créer le workflow N8N
-        async function createWorkflowInN8N(apiKey, aiPrompt, calendlyLink, includeCalendly) {
-            const n8nApiUrl = 'https://eliasse-n8n.onrender.com/rest/workflows';
-            const n8nApiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlM2JkMzU1MC05OGYwLTRjM2ItOWJmNC0wMzM0OGU5MjAzOTYiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwiaWF0IjoxNzQxNjQwMDUzfQ.rMdXiVwMqbUogaeRdwekFEK-sC9NER9kRfizH4HqXjg';
-            
-            // Modifier le message système en fonction des entrées de l'utilisateur
-            let systemMessage = `Tâche
-Tu envoies des emails réponse aux leads qui te contactent.
-
-Context
-Nous aidons les centres de formation à attirer plus d'apprenants grâce à des systèmes IA clé en main qui optimisent leurs méthodes d'acquisition. Nos solutions IA permettent d'améliorer significativement leur capacité à attirer et convertirs des prospects en apprenants et obtenir +20 apprenants supplémentaires dès le premier mois.
-
-Instruction
-Je te fournis la réponse du lead.
-Tu écris un très court mail en HTML sans sujet dans lequel tu réponds au lead.
-
-${aiPrompt}
-
-Si le lead t'a envoyé un message positif, qu'il est intéressé ou qu'il demande plus d'informations, tu vas simplement le remercier rapidement :
-"Merci pour votre réponse, je vous propose un audit gratuit"
-
-Ensuite, tu vas lui envoyer le lien pour réserver un rendez-vous sous cette forme :`;
-
-            // Ajouter le lien Calendly si fourni
-            if (calendlyLink) {
-                systemMessage += `\nLien de réservation : ${calendlyLink}`;
-            } else {
-                systemMessage += `\nLien de réservation : https://calendly.com/hamoureliasse/session-offerte-sur-les-agents-ia-clone`;
-            }
-
-            systemMessage += `
-
-Le lien doit être affiché en brut, sans bouton.
-Tu peux également inclure notre site web pour plus d'informations : https://eliassaoe.github.io/site_web/
-
-Fais très attention à la mise en forme de ton e-mail, il doit être agréable à lire. Le code HTML doit être complet avec DOCTYPE et tout le nécessaire, et tu dois vouvoyer dans ta réponse.
-
-Si le lead répond négativement ou semble ne pas être intéressé, fais une courte réponse pour essayer de mieux comprendre ce qui le bloque et lui expliquer que l'audit est gratuit et durant l'audit gratuit on voit ensemble comment mettre en place l'IA dans ses processus d'acquisition pour attirer plus d'apprenants qualifiés.
-
-Si le lead semble avoir un problème pour prendre rendez-vous ou ne trouve pas le créneau qu'il souhaite avec le lien calendly.
-Tu dois lui demander de te proposer un créneau horaire. En fonction de sa réponse, réserve directement un rendez-vous dans le calendrier en utilisant l'outil Google Calendar.
-
-Exemples de phrases à inclure :
-\t"Merci pour votre réponse."
-\t"L'audit gratuit n'engage en rien."
-\t"Nous avons mis ce même système en place dans plusieurs centres de formation, et ils ont tous augmenté leur nombre d'apprenants de 30% dès le premier mois."
-
-Notes
-Si on te demande notre site web envoie celui ci : https://eliassaoe.github.io/site_web/ . Tu peux aussi l'envoyer pour une personne qui demande plus de détails 
-Important : Utilise le fuseau horaire France/Paris pour créer les rendez-vous dans google calendar
-\tFais des réponses très courtes et naturelles.
-\tRéponds de manière claire et concise, sans trop de détails. L'objectif est d'inciter le lead à réserver un audit.
-\tUtilise le prénom du lead et signe avec ton prénom.
-\tSi la personne indique dans son email qu'elle est absente, ne lui envoie pas de réponse.
-\tRetourne la réponse à l'email du lead sans l'objet et en html et rien d'autre.`;
-
-            // Configurer le workflow avec les paramètres personnalisés
-            const workflowData = {
-                "name": "AI Email Responder",
-                "nodes": [
-                    {
-                        "parameters": {
-                            "promptType": "define",
-                            "text": "={{ $json.reply_text }}\nemail du lead : {{ $json.email_lead }}\nL'email que tu utilise : {{ $json.email_team }} (utilise le meme nom)",
-                            "options": {
-                                "systemMessage": systemMessage
-                            }
-                        },
-                        "type": "@n8n/n8n-nodes-langchain.agent",
-                        "typeVersion": 1.7,
-                        "position": [
-                            20,
-                            0
-                        ],
-                        "id": "721203fe-2072-4fef-8745-293af7586fe8",
-                        "name": "AI Agent"
-                    },
-                    {
-                        "parameters": {
-                            "method": "POST",
-                            "url": `https://api.instantly.ai/api/v1/unibox/emails/reply?api_key=${apiKey}`,
-                            "sendBody": true,
-                            "bodyParameters": {
-                                "parameters": [
-                                    {
-                                        "name": "reply_to_uuid",
-                                        "value": "={{ $json.data[0].id }}"
-                                    },
-                                    {
-                                        "name": "subject",
-                                        "value": "={{ $('Edit Fields').item.json.reply_subject }}"
-                                    },
-                                    {
-                                        "name": "from",
-                                        "value": "={{ $('Edit Fields').item.json.email_team }}"
-                                    },
-                                    {
-                                        "name": "to",
-                                        "value": "={{ $('Webhook').item.json.body.lead_email }}"
-                                    },
-                                    {
-                                        "name": "body",
-                                        "value": "={{ $('Code').item.json.html }}"
-                                    }
-                                ]
-                            },
-                            "options": {}
-                        },
-                        "type": "n8n-nodes-base.httpRequest",
-                        "typeVersion": 4.2,
-                        "position": [
-                            940,
-                            0
-                        ],
-                        "id": "313223c7-8583-438f-96f3-69fafbd97f8c",
-                        "name": "HTTP Request"
-                    },
-                    {
-                        "parameters": {
-                            "url": `https://api.instantly.ai/api/v1/unibox/emails?api_key=${apiKey}`,
-                            "sendHeaders": true,
-                            "headerParameters": {
-                                "parameters": [
-                                    {}
-                                ]
-                            },
-                            "sendBody": true,
-                            "bodyParameters": {
-                                "parameters": [
-                                    {}
-                                ]
-                            },
-                            "options": {}
-                        },
-                        "type": "n8n-nodes-base.httpRequest",
-                        "typeVersion": 4.2,
-                        "position": [
-                            680,
-                            0
-                        ],
-                        "id": "9cf18a47-73b6-41b7-87a0-84d9feb7f474",
-                        "name": "HTTP Request2"
-                    },
-                    {
-                        "parameters": {
-                            "assignments": {
-                                "assignments": [
-                                    {
-                                        "id": "fa2119fd-dbb3-4b01-ad4f-a31e4601f837",
-                                        "name": "email_lead",
-                                        "value": "={{ $json.body.email }}",
-                                        "type": "string"
-                                    },
-                                    {
-                                        "id": "f3cc8717-158c-480c-bd80-225b4803a157",
-                                        "name": "email_team",
-                                        "value": "={{ $json.body.email_account }}",
-                                        "type": "string"
-                                    },
-                                    {
-                                        "id": "506efbab-6eef-4f1a-ac3d-650d8b6f51d6",
-                                        "name": "reply_subject",
-                                        "value": "={{ $json.body.reply_subject }}",
-                                        "type": "string"
-                                    },
-                                    {
-                                        "id": "dcffb398-40be-48b6-8f57-4b23644742d1",
-                                        "name": "reply_text",
-                                        "value": "={{ $json.body.reply_text }}",
-                                        "type": "string"
-                                    }
-                                ]
-                            },
-                            "options": {}
-                        },
-                        "type": "n8n-nodes-base.set",
-                        "typeVersion": 3.4,
-                        "position": [
-                            -180,
-                            0
-                        ],
-                        "id": "c955ca28-e429-483c-822d-5ea7744df7e4",
-                        "name": "Edit Fields"
-                    },
-                    {
-                        "parameters": {
-                            "sessionIdType": "customKey",
-                            "sessionKey": "={{ $('Webhook').item.json.body.campaign_id }}",
-                            "contextWindowLength": 100
-                        },
-                        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
-                        "typeVersion": 1.3,
-                        "position": [
-                            120,
-                            400
-                        ],
-                        "id": "ab67abec-c974-4bfa-8c89-cd7cc559d889",
-                        "name": "Window Buffer Memory"
-                    },
-                    {
-                        "parameters": {
-                            "model": "=anthropic/claude-3.5-sonnet",
-                            "options": {}
-                        },
-                        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-                        "typeVersion": 1.1,
-                        "position": [
-                            -40,
-                            360
-                        ],
-                        "id": "362e045f-7c88-4319-ba23-8e20dadc9585",
-                        "name": "OpenAI Chat Model",
-                        "credentials": {
-                            "openAiApi": {
-                                "id": "JHHfPewLu5ALOxZT",
-                                "name": "Deepseek v3 "
-                            }
-                        }
-                    },
-                    {
-                        "parameters": {
-                            "mode": "runOnceForEachItem",
-                            "jsCode": "function formaterPourN8n(texte) {\n    // Nettoie le texte des marqueurs HTML et backticks\n    let texteNettoye = texte.trim();\n    \n    // Supprime les marqueurs de début\n    if (texteNettoye.startsWith('```html')) {\n        texteNettoye = texteNettoye.substring('```html'.length);\n    }\n    \n    // Supprime les marqueurs de fin\n    if (texteNettoye.endsWith('```')) {\n        texteNettoye = texteNettoye.substring(0, texteNettoye.length - 3);\n    }\n    \n    // Retourne l'objet avec le HTML nettoyé\n    return {\n        html: texteNettoye.trim()\n    };\n}\n\n// Traitement de l'entrée\nconst texteOriginal = $json.output;\nreturn formaterPourN8n(texteOriginal);"
-                        },
-                        "type": "n8n-nodes-base.code",
-                        "typeVersion": 2,
-                        "position": [
-                            440,
-                            0
-                        ],
-                        "id": "abd5fdf6-56ba-4bf0-8d64-54c3ebd8bf49",
-                        "name": "Code"
-                    },
-                    {
-                        "parameters": {
-                            "httpMethod": "POST",
-                            "path": "prospection",
-                            "options": {}
-                        },
-                        "type": "n8n-nodes-base.webhook",
-                        "typeVersion": 2,
-                        "position": [
-                            -480,
-                            0
-                        ],
-                        "id": "0edc0be1-8efe-4670-9f97-ec6698201a2c",
-                        "name": "Webhook",
-                        "webhookId": "1c0cfa34-672d-4836-a4c1-5912619afa87"
-                    },
-                    {
-                        "parameters": {
-                            "calendar": {
-                                "__rl": true,
-                                "value": "hamoureliasse@gmail.com",
-                                "mode": "list",
-                                "cachedResultName": "hamoureliasse@gmail.com"
-                            },
-                            "start": "={{ $fromAI('Start_time_of_meeting') }}",
-                            "end": "={{ $fromAI('30_after_start_time') }}",
-                            "additionalFields": {
-                                "attendees": [
-                                    "={{ $json.email_lead }}",
-                                    "hamoureliasse@gmail.com",
-                                    "samyhamour93@gmail.com"
-                                ]
-                            }
-                        },
-                        "type": "n8n-nodes-base.googleCalendarTool",
-                        "typeVersion": 1.2,
-                        "position": [
-                            420,
-                            420
-                        ],
-                        "id": "8e0b7c13-62f1-4017-bedd-a7bae2ea913e",
-                        "name": "Google Calendar",
-                        "credentials": {
-                            "googleCalendarOAuth2Api": {
-                                "id": "5uKycoyI9xkusVyl",
-                                "name": "Google Calendar account 3"
-                            }
-                        }
-                    },
-                    {
-                        "parameters": {
-                            "operation": "getAll",
-                            "calendar": {
-                                "__rl": true,
-                                "value": "hamoureliasse@gmail.com",
-                                "mode": "list",
-                                "cachedResultName": "hamoureliasse@gmail.com"
-                            },
-                            "returnAll": true,
-                            "options": {
-                                "timeMin": "={{ $fromAI('check_available_slot_after_date') }}"
-                            }
-                        },
-                        "type": "n8n-nodes-base.googleCalendarTool",
-                        "typeVersion": 1.2,
-                        "position": [
-                            260,
-                            440
-                        ],
-                        "id": "bcf8f949-ca1b-43cb-abb9-2862dc079912",
-                        "name": "Google Calendar1",
-                        "credentials": {
-                            "googleCalendarOAuth2Api": {
-                                "id": "5uKycoyI9xkusVyl",
-                                "name": "Google Calendar account 3"
-                            }
-                        }
-                    }
-                ],
-                "connections": {
-                    "AI Agent": {
-                        "main": [
-                            [
-                                {
-                                    "node": "Code",
-                                    "type": "main",
-                                    "index": 0
-                                }
-                            ]
-                        ]
-                    },
-                    "HTTP Request2": {
-                        "main": [
-                            [
-                                {
-                                    "node": "HTTP Request",
-                                    "type": "main",
-                                    "index": 0
-                                }
-                            ]
-                        ]
-                    },
-                    "Edit Fields": {
-                        "main": [
-                            [
-                                {
-                                    "node": "AI Agent",
-                                    "type": "main",
-                                    "index": 0
-                                }
-                            ]
-                        ]
-                    },
-                    "Window Buffer Memory": {
-                        "ai_memory": [
-                            [
-                                {
-                                    "node": "AI Agent",
-                                    "type": "ai_memory",
-                                    "index": 0
-                                }
-                            ]
-                        ]
-                    },
-                    "OpenAI Chat Model": {
-                        "ai_languageModel": [
-                            [
-                                {
-                                    "node": "AI Agent",
-                                    "type": "ai_languageModel",
-                                    "index": 0
-                                }
-                            ]
-                        ]
-                    },
-                    "Code": {
-                        "main": [
-                            [
-                                {
-                                    "node": "HTTP Request2",
-                                    "type": "main",
-                                    "index": 0
-                                }
-                            ]
-                        ]
-                    },
-                    "Webhook": {
-                        "main": [
-                            [
-                                {
-                                    "node": "Edit Fields",
-                                    "type": "main",
-                                    "index": 0
-                                }
-                            ]
-                        ]
-                    },
-                    "Google Calendar": {
-                        "ai_tool": [
-                            [
-                                {
-                                    "node": "AI Agent",
-                                    "type": "ai_tool",
-                                    "index": 0
-                                }
-                            ]
-                        ]
-                    },
-                    "Google Calendar1": {
-                        "ai_tool": [
-                            [
-                                {
-                                    "node": "AI Agent",
-                                    "type": "ai_tool",
-                                    "index": 0
-                                }
-                            ]
-                        ]
-                    }
-                },
-                "active": true,
-                "settings": {
-                    "executionOrder": "v1"
-                },
-                "meta": {
-                    "instanceId": "5b8ee112f8d3686b3bc97d50979f544174c6c5cdc3ce371837d5ec3d22b5c12b"
-                },
-                "tags": []
-            };
-            
-            try {
-                const response = await fetch(n8nApiUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-N8N-API-KEY': n8nApiKey
-                    },
-                    body: JSON.stringify(workflowData)
-                });
-                
-                if (response.ok) {
-                    const result = await response.json();
-                    console.log('Workflow créé avec succès:', result);
-                    
-                    // Activer le workflow une fois créé
-                    if (result.id) {
-                        await activateWorkflow(result.id);
-                    }
-                    
-                    return {
-                        success: true,
-                        workflowId: result.id,
-                        webhookUrl: `https://eliasse-n8n.onrender.com/webhook/prospection`
-                    };
-                } else {
-                    const errorText = await response.text();
-                    console.error('Erreur lors de la création du workflow:', errorText);
-                    return {
-                        success: false,
-                        error: errorText
-                    };
-                }
-            } catch (error) {
-                console.error('Exception lors de la création du workflow:', error);
-                return {
-                    success: false,
-                    error: error.message
-                };
-            }
-        }
-
-        // Fonction pour activer le workflow
-        async function activateWorkflow(workflowId) {
-            const n8nApiUrl = `https://eliasse-n8n.onrender.com/rest/workflows/${workflowId}/activate`;
-            const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlM2JkMzU1MC05OGYwLTRjM2ItOWJmNC0wMzM0OGU5MjAzOTYiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwiaWF0IjoxNzQxNjQwMDUzfQ.rMdXiVwMqbUogaeRdwekFEK-sC9NER9kRfizH4HqXjg';
-            
-            try {
-                const response = await fetch(n8nApiUrl, {
-                    method: 'POST',
-                    headers: {
-                        'X-N8N-API-KEY': apiKey
-                    }
-                });
-                
-                if (response.ok) {
-                    console.log('Workflow activé avec succès');
-                    return true;
-                } else {
-                    console.error('Erreur lors de l\'activation du workflow:', await response.text());
-                    return false;
-                }
-            } catch (error) {
-                console.error('Exception lors de l\'activation du workflow:', error);
-                return false;
-            }
-        }
-
         // Form submission
         document.getElementById('agent-setup-form').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -1266,26 +788,35 @@ Important : Utilise le fuseau horaire France/Paris pour créer les rendez-vous d
             submitBtn.classList.add('btn-loading');
             
             // Récupérer les valeurs du formulaire
+            const agentName = document.getElementById('agent-name').value;
             const apiKey = document.getElementById('api-key').value;
             const aiPrompt = document.getElementById('ai-prompt').value;
             const calendlyLink = document.getElementById('calendly-link').value;
             const includeCalendly = document.getElementById('include-calendly').checked;
             
             try {
-                // Appeler la fonction pour créer le workflow dans N8N
-                const result = await createWorkflowInN8N(apiKey, aiPrompt, calendlyLink, includeCalendly);
+                // Envoyer les données au webhook
+                const response = await fetch('https://eliasse-n8n.onrender.com/webhook/c2fe3671-2e47-47df-a265-4f66526198d8', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        agent_name: agentName,
+                        api_key: apiKey,
+                        ai_prompt: aiPrompt,
+                        calendly_link: calendlyLink,
+                        include_calendly: includeCalendly
+                    })
+                });
                 
                 submitBtn.classList.remove('btn-loading');
                 
-                if (result.success) {
-                    // Stocker les informations du workflow pour une utilisation ultérieure
-                    localStorage.setItem('workflowId', result.workflowId);
-                    localStorage.setItem('webhookUrl', result.webhookUrl);
-                    
+                if (response.ok) {
                     // Afficher le message de succès
                     document.getElementById('success-dialog').classList.add('active');
                 } else {
-                    alert('Erreur lors de la création de l\'agent : ' + (result.error || 'Erreur inconnue'));
+                    alert('Erreur lors de la création de l\'agent. Veuillez réessayer.');
                 }
             } catch (error) {
                 submitBtn.classList.remove('btn-loading');
